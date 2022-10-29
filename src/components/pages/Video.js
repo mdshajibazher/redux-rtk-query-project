@@ -10,7 +10,9 @@ import RelatedVideoLoader from "../ui/loaders/RelatedVideoLoader";
 
 export default function Video() {
     const {videoId} = useParams();
-    const {data : video, isLoading,isError} =  useGetVideoQuery(videoId);
+    const {data : video, isLoading,isError} =  useGetVideoQuery(videoId,{
+        refetchOnMountOrArgChange: false ,// we can put seconds like 5,
+    });
 
     let content = "";
     let relatedVideo = "";
