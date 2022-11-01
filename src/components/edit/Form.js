@@ -1,7 +1,60 @@
 import TextArea from "../ui/TextArea";
 import TextInput from "../ui/TextInput";
+import {useState} from "react";
+import {useEditVideoMutation} from "../../features/api/apiSlice";
 
-export default function Form() {
+export default function Form({video}) {
+    const {
+        id,
+        title: initialTitle,
+        author: initialAuthor,
+        description: initialDescription,
+        link: initialLink,
+        thumbnail: initialThumbnail,
+        duration: initialDuration,
+        views: initialViews
+    } = video;
+
+    const [editVideo, {data: editedVideo,isLoadin, isError,}] = useEditVideoMutation
+    const [title,setTitle] = useState(initialTitle);
+    const [author,setAuthor] = useState(initialAuthor);
+    const [description,setDescription] = useState(initialDescription);
+    const [videoLink,setVideoLink] = useState(initialLink);
+    const [thumbnailLink,setThumbnailLink] = useState(initialThumbnail);
+    const [date,setDate] = useState(initialViews);
+    const [duration,setDuration] = useState(initialDuration);
+    const [views,setViews] = useState(initialViews);
+
+    // const resetForm = () => {
+    //     setTitle('');
+    //     setAuthor('');
+    //     setDescription('');
+    //     setVideoLink('');
+    //     setThumbnailLink('');
+    //     setDate('');
+    //     setDuration('');
+    //     setViews('');
+    // }
+    //
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        editVideo({
+            id: id,
+            data: {
+                "title":title,
+                "description": description,
+                "author": author,
+                "date":  date,
+                "duration":   duration,
+                "views":  views,
+                "link": videoLink,
+                "thumbnail":  thumbnailLink,
+            }
+        })
+        resetForm();
+    }
+
+
     return (
         <form action="#" method="POST">
             <div className="shadow overflow-hidden sm:rounded-md">
