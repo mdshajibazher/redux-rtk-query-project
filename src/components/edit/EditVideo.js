@@ -21,7 +21,7 @@ export default function EditVideo() {
     }
 
     if(!isLoading && !isError && video?.id){
-        content = <Form video={video} />
+        content =  <Form video={video} />
     }
     return (
         <div className="max-w-7xl mx-auto px-5 lg:px-0">

@@ -2,6 +2,8 @@ import TextArea from "../ui/TextArea";
 import TextInput from "../ui/TextInput";
 import {useState} from "react";
 import {useEditVideoMutation} from "../../features/api/apiSlice";
+import Success from "../ui/Success";
+import Error from "../ui/Error";
 
 export default function Form({video}) {
     const {
@@ -15,7 +17,7 @@ export default function Form({video}) {
         views: initialViews
     } = video;
 
-    const [editVideo, {data: editedVideo,isLoadin, isError,}] = useEditVideoMutation
+    const [editVideo, {data: editedVideo,isLoading, isError,isSuccess}] = useEditVideoMutation();
     const [title,setTitle] = useState(initialTitle);
     const [author,setAuthor] = useState(initialAuthor);
     const [description,setDescription] = useState(initialDescription);
@@ -25,17 +27,8 @@ export default function Form({video}) {
     const [duration,setDuration] = useState(initialDuration);
     const [views,setViews] = useState(initialViews);
 
-    // const resetForm = () => {
-    //     setTitle('');
-    //     setAuthor('');
-    //     setDescription('');
-    //     setVideoLink('');
-    //     setThumbnailLink('');
-    //     setDate('');
-    //     setDuration('');
-    //     setViews('');
-    // }
-    //
+
+
     const handleSubmit = (e) => {
         e.preventDefault();
         editVideo({
@@ -51,45 +44,45 @@ export default function Form({video}) {
                 "thumbnail":  thumbnailLink,
             }
         })
-        resetForm();
+
     }
 
 
     return (
-        <form action="#" method="POST">
+        <form action="#" method="POST" onSubmit={handleSubmit}>
             <div className="shadow overflow-hidden sm:rounded-md">
                 <div className="px-4 py-5 bg-white sm:p-6">
                     <div className="grid grid-cols-6 gap-6">
                         <div className="col-span-6 sm:col-span-3">
-                            <TextInput title="Video Title" />
+                            <TextInput value={title} title="Video Title" onChange={e => setTitle(e.target.value)}/>
                         </div>
 
                         <div className="col-span-6 sm:col-span-3">
-                            <TextInput title="Author" />
+                            <TextInput value={author} title="Author" onChange={e => setAuthor(e.target.value)} />
                         </div>
 
                         <div className="col-span-6">
-                            <TextArea title="Description" />
+                            <TextArea  value={description} title="Description" onChange={e => setDescription(e.target.value)} />
                         </div>
 
                         <div className="col-span-6">
-                            <TextInput title="YouTube Video link" />
+                            <TextInput  value={videoLink} title="YouTube Video link" onChange={e => setVideoLink(e.target.value)} />
                         </div>
 
                         <div className="col-span-6">
-                            <TextInput title="Thumbnail link" />
+                            <TextInput title="Thumbnail link" value={thumbnailLink}  onChange={e => setThumbnailLink(e.target.value)} />
                         </div>
 
                         <div className="col-span-6 sm:col-span-6 lg:col-span-2">
-                            <TextInput title="Upload Date" />
+                            <TextInput value={date}  onChange={e => setDate(e.target.value)} title="Upload Date" />
                         </div>
 
                         <div className="col-span-6 sm:col-span-3 lg:col-span-2">
-                            <TextInput title="Video Duration" />
+                            <TextInput title="Video Duration" value={duration}  onChange={e => setDuration(e.target.value)}  />
                         </div>
 
                         <div className="col-span-6 sm:col-span-3 lg:col-span-2">
-                            <TextInput title="Video no of views" />
+                            <TextInput title="Video no of views" value={views}  onChange={e => setViews(e.target.value)} />
                         </div>
                     </div>
                 </div>
@@ -101,6 +94,9 @@ export default function Form({video}) {
                         Save
                     </button>
                 </div>
+
+                { isSuccess && <Success message="Video was edited successfully" /> }
+                { isError && <Error message="There was an error" /> }
             </div>
         </form>
     );
